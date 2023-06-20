@@ -1,0 +1,31 @@
+version: '3'
+services:
+  db_jj:
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=mypassword
+      - MYSQL_DATABASE=mydatabase
+    ports:
+      - 3306:3306
+
+
+  api_jj:
+    build:
+      context: ./serverDockerTP2/
+      dockerfile: Dockerfile
+    ports:
+      - 4000:4000
+    depends_on:
+      - db_jj
+    restart: on-failure
+    environment:
+      - DB_HOST=db_jj
+  front_jj:
+    build:
+      context: ./frontendDockerTp2/
+      dockerfile: Dockerfile
+    ports:
+      - 4001:4001
+    depends_on:
+      - api_jj
+    restart: on-failure
